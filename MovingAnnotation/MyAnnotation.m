@@ -64,7 +64,7 @@
 }
 
 
-
+#pragma mark setupAnnotationView
 - (MKAnnotationView *)identifierWith:(MKMapView *)mapView identifier:(NSString *)identifier
 {
 		return (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
@@ -84,7 +84,7 @@
 		return myView;
 }
 
-
+#pragma mark Notification
 - (void)onNotifiedCurrentLocationUpdated:(NSNotification *)notification
 {
 		if (notification.object) {
@@ -97,14 +97,14 @@
 						NSLog(@"----- moveArrayCount: %ld",moveArray.count);
 						NSLog(@"------beging moving -----");
 						currentIndex = 0;
-						[self startMoving];		
+						movingOver = NO;
+						[self startMoving];
 				}
 		}
 }
 
 - (void)startMoving
 {
-		movingOver = NO;
 		NSInteger index = currentIndex % moveArray.count;
 		NSLog(@"----- currentIndex : %ld",index);
 		CLLocation *newLocation = moveArray[index];
