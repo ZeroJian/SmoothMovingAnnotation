@@ -65,16 +65,11 @@
 
 
 #pragma mark setupAnnotationView
-- (MKAnnotationView *)identifierWith:(MKMapView *)mapView identifier:(NSString *)identifier
-{
-		return (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifier];
-}
 
 - (MKAnnotationView *)setupWithView:(MKMapView *)mapView
 												 identifier:(NSString *)identifer
 {
-		MKAnnotationView *myView = [self identifierWith:mapView
-																				 identifier:identifer];
+		MKAnnotationView *myView = (MKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:identifer];
 		if (myView == nil) {
 				myView = [[MKAnnotationView alloc] initWithAnnotation:self
 																							reuseIdentifier:identifer];

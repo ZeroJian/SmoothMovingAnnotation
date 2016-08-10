@@ -41,12 +41,16 @@
 
 - (void)addAnnotation
 {
-		self.hasAnnotation = YES;
+		
 		CLLocation *currentLocation = [LocationManager currentUserLocation];
-		MyAnnotation *item = [[MyAnnotation alloc] initWithType:(MyAnnotationTypeCar)
-																								 coordinate:currentLocation.coordinate
-																											angle:currentLocation.course];
-		[self.mapView addAnnotation:item];
+		if (currentLocation != nil) {
+				self.hasAnnotation = YES;
+				MyAnnotation *item = [[MyAnnotation alloc] initWithType:(MyAnnotationTypeCar)
+																										 coordinate:currentLocation.coordinate
+																													angle:currentLocation.course];
+				[self.mapView addAnnotation:item];
+		}
+		
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
