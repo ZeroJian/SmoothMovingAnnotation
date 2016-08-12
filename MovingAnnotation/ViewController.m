@@ -18,15 +18,21 @@
 @end
 
 @implementation ViewController
+
 - (IBAction)showLocation:(UIBarButtonItem *)sender {
 		
 		CLLocation *currentLocation = [LocationManager currentUserLocation];
-		[self.mapView setCenterCoordinate:currentLocation.coordinate animated:YES];
+		
+		if (currentLocation == nil) {
+				return;
+		}
+
 		MKCoordinateSpan span = {0.04,0.04};
 		MKCoordinateRegion region = {currentLocation.coordinate,span};
 		[self.mapView setRegion:region animated:YES];
+		
 		if (!self.hasAnnotation) {
-				[self addAnnotation];
+				[self addAnnotationWithLocation:currentLocation];
 		}
 }
 
@@ -39,18 +45,13 @@
 		self.mapView.delegate = self;
 }
 
-- (void)addAnnotation
+- (void)addAnnotationWithLocation:(CLLocation *)location
 {
-		
-		CLLocation *currentLocation = [LocationManager currentUserLocation];
-		if (currentLocation != nil) {
-				self.hasAnnotation = YES;
-				MyAnnotation *item = [[MyAnnotation alloc] initWithType:(MyAnnotationTypeCar)
-																										 coordinate:currentLocation.coordinate
-																													angle:currentLocation.course];
-				[self.mapView addAnnotation:item];
-		}
-		
+		self.hasAnnotation = YES;
+		MyAnnotation *item = [[MyAnnotation alloc] initWithType:(MyAnnotationTypeCar)
+																								 coordinate:location.coordinate
+																										  angle:location.course];
+		[self.mapView addAnnotation:item];
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation

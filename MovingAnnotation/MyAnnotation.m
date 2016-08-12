@@ -31,7 +31,9 @@
 				_coordinate = coordinate;
 				_angle = angle;
 				if (type == MyAnnotationTypeCar) {
-						[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotifiedCurrentLocationUpdated:) name:kdidUpdateLocation object:nil];
+						[[NSNotificationCenter defaultCenter] addObserver:self
+																										 selector:@selector(onNotifiedCurrentLocationUpdated:) name:kdidUpdateLocation
+																											 object:nil];
 						locations = [[NSMutableArray alloc] initWithCapacity:20];
 						movingOver = YES;
 				}
@@ -47,7 +49,7 @@
 				case MyAnnotationTypeUser:
 				{
 						annotationView = [self setupWithView:mapView identifier:@"UserAnnotation"];
-		
+						
 				}
       break;
 				case MyAnnotationTypeCar:
@@ -98,16 +100,17 @@
 		}
 }
 
+#pragma mark Moving Annotation
 - (void)startMoving
 {
 		NSInteger index = currentIndex % moveArray.count;
-		NSLog(@"----- currentIndex : %ld",index);
 		CLLocation *newLocation = moveArray[index];
-
+		
 		self.annotationView.image = [annnationImage zj_imageRotatedByAngle:newLocation.course];
 		
 		CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:self.coordinate.latitude longitude:self.coordinate.longitude];
 		double distance = [newLocation distanceFromLocation:currentLocation];
+		
 		double speed = newLocation.speed;
 		
 		CLLocationCoordinate2D newCoordinate = newLocation.coordinate;
@@ -116,7 +119,7 @@
 				self.coordinate = newCoordinate;
 				currentIndex ++;
 		} completion:^(BOOL finished) {
-				if (currentIndex == moveArray.count - 1) {
+				if (currentIndex == moveArray.count) {
 						movingOver = YES;
 						moveArray = nil;
 				} else {
@@ -125,6 +128,10 @@
 		}];
 }
 
+- (void)dealloc
+{
+		[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
 
